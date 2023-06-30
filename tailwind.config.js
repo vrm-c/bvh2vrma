@@ -1,6 +1,7 @@
 const {config} = require('@charcoal-ui/tailwind-config')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: false,
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
