@@ -23,7 +23,13 @@ const ModalWrapper = (props: ModalWrapperProps) => {
             <ul className="list-disc pl-24">
               <li>bvhファイルをVRMAnimationファイル(vrma)に変換するアプリケーションです。</li>
               <li>このサイトは入力されたbvhファイルをサーバーにアップロードしません。</li>
-              <li>このサイトのライセンスはMITです。</li>
+              <li>
+                このサイトのライセンスはMITです。リポジトリのリンクは
+                <a className="text-[#3D7699]" href="https://github.com/vrm-c/bvh2vrma">
+                  こちら
+                </a>
+                です。
+              </li>
             </ul>
           </div>
           <div className="py-24 text-[--charcoal-brand] text-[20px]">利用上の注意</div>
