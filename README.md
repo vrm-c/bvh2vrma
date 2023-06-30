@@ -5,6 +5,7 @@
 # デモ
 
 GitHub Pages でデモを公開しています。
+https://vrm-c.github.io/bvh2vrma/
 
 # 注意点
 
