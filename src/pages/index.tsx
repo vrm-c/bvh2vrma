@@ -9,9 +9,9 @@ export default function Home() {
   const [blobURL, setBlobURL] = useState<string | null>(null);
   const modalState = useOverlayTriggerState({});
   return (
-    <main className={`h-screen flex justify-center lg:items-center font-sans lg:bg-[#F5F5F5]`}>
+    <main className={`h-screen flex justify-center lg:items-center font-sans`}>
       <Modal state={modalState} />
-      <div className="rounded-[24px] lg:h-[80vh] lg:w-[80vw] flex justify-center lg:items-center  lg:bg-[#FFFFFF]">
+      <div className="rounded-[24px] lg:h-[80vh] lg:w-[80vw] flex justify-center lg:items-center lg:bg-[--charcoal-background1]">
         <div className="lg:w-[60vw] lg:flex lg:flex-row-reverse lg:justify-around">
           {blobURL ? (
             <>
