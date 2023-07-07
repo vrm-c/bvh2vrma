@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { VRMHumanBoneName } from '@pixiv/three-vrm';
+import { pickByProbability } from './pickByProbability';
 
 const _v3A = new THREE.Vector3();
 
@@ -228,20 +229,35 @@ function determineHeadBones(
   let leftEye: THREE.Bone | null = null;
   let rightEye: THREE.Bone | null = null;
 
-  if (head.children.length >= 2) {
-    if (head.children.length > 2) {
-      console.warn(
-        'The skeleton has more than three children of head. You might get an unexpected result.'
-      );
-    }
+  if (head.children.length === 0) {
+    leftEye = pickByProbability(
+      head.children,
+      [
+        { func: (obj) => evaluatorName(obj, 'lefteye'), weight: 10.0 },
+        { func: (obj) => evaluatorName(obj, 'l_faceeye'), weight: 10.0 },
+        { func: (obj) => evaluatorName(obj, 'eye'), weight: 1.0 },
+        { func: (obj) => obj.getWorldPosition(_v3A).x, weight: 1.0 },
+      ]
+    ) as THREE.Bone;
 
-    // assuming z+ is the front, determine left eye and right eye
-    const eyeCands = sortObjectArrayByWorldX(head.children.concat() as THREE.Bone[]);
-    rightEye = eyeCands.shift()!;
-    leftEye = eyeCands.pop()!;
+    rightEye = pickByProbability(
+      head.children,
+      [
+        { func: (obj) => obj === leftEye ? 1.0 : 0.0, weight: -100.0 },
+        { func: (obj) => evaluatorName(obj, 'righteye'), weight: 10.0 },
+        { func: (obj) => evaluatorName(obj, 'r_faceeye'), weight: 10.0 },
+        { func: (obj) => evaluatorName(obj, 'eye'), weight: 1.0 },
+        { func: (obj) => -obj.getWorldPosition(_v3A).x, weight: 1.0 },
+      ]
+    ) as THREE.Bone;
   }
 
   return [neck, head, leftEye, rightEye];
+}
+
+function evaluatorName(obj: THREE.Object3D, substring: string): number {
+  const nameLowerCase = obj.name.toLowerCase();
+  return nameLowerCase.includes(substring) ? 1 : 0;
 }
 
 /**
@@ -275,16 +291,25 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   }
 
   // find leg roots - two children of hips extends to below
-  if (hips.children.length > 3) {
-    console.warn(
-      'The skeleton has more than three children of hips. You might get an unexpected result.'
-    );
-  }
-
-  // assuming z+ is the front, determine left leg and right leg
-  const legRootCands = sortObjectArrayByWorldX(hips.children.concat() as THREE.Bone[]);
-  const rightLegRoot = legRootCands.shift()!;
-  const leftLegRoot = legRootCands.pop()!;
+  const leftLegRoot = pickByProbability(
+    hips.children,
+    [
+      { func: (obj) => evaluatorName(obj, 'leftupperleg'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'l_upperleg'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'leg'), weight: 1.0 },
+      { func: (obj) => obj.getWorldPosition(_v3A).x, weight: 1.0 },
+    ]
+  ) as THREE.Bone;
+  const rightLegRoot = pickByProbability(
+    hips.children,
+    [
+      { func: (obj) => obj === leftLegRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => evaluatorName(obj, 'rightupperleg'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'r_upperleg'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'leg'), weight: 1.0 },
+      { func: (obj) => -obj.getWorldPosition(_v3A).x, weight: 1.0 },
+    ]
+  ) as THREE.Bone;
 
   // determine leg bones
   const [leftUpperLeg, leftLowerLeg, leftFoot, leftToes] = determineLegBones(leftLegRoot);
@@ -304,16 +329,41 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   }
 
   // assuming z+ is the front, determine left arm and right arm
-  if (chestCand.children.length > 3) {
-    console.warn(
-      'The skeleton has more than three children of chest. You might get an unexpected result.'
-    );
-  }
-
-  const armRootCands = sortObjectArrayByWorldX(chestCand.children.concat() as THREE.Bone[]);
-  const rightArmRoot = armRootCands.shift()!;
-  const leftArmRoot = armRootCands.pop()!;
-  const headRoot = armRootCands.pop()!;
+  const leftArmRoot = pickByProbability(
+    chestCand.children,
+    [
+      { func: (obj) => evaluatorName(obj, 'leftshoulder'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'l_shoulder'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'leftupperarm'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'l_upperarm'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'shoulder'), weight: 1.0 },
+      { func: (obj) => evaluatorName(obj, 'arm'), weight: 1.0 },
+      { func: (obj) => obj.getWorldPosition(_v3A).x, weight: 1.0 },
+    ]
+  ) as THREE.Bone;
+  const rightArmRoot = pickByProbability(
+    chestCand.children,
+    [
+      { func: (obj) => obj === leftArmRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => evaluatorName(obj, 'rightshoulder'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'r_shoulder'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'rightupperarm'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'r_upperarm'), weight: 10.0 },
+      { func: (obj) => evaluatorName(obj, 'shoulder'), weight: 1.0 },
+      { func: (obj) => evaluatorName(obj, 'arm'), weight: 1.0 },
+      { func: (obj) => -obj.getWorldPosition(_v3A).x, weight: 1.0 },
+    ]
+  ) as THREE.Bone;
+  const headRoot = pickByProbability(
+    chestCand.children,
+    [
+      { func: (obj) => obj === leftArmRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => obj === rightArmRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => evaluatorName(obj, 'neck'), weight: 1.0 },
+      { func: (obj) => evaluatorName(obj, 'head'), weight: 1.0 },
+      { func: (obj) => Math.abs(obj.getWorldPosition(_v3A).x), weight: -1.0 },
+    ]
+  ) as THREE.Bone;
 
   // determine hand bones
   const [leftShoulder, leftUpperArm, leftLowerArm, leftHand] = determineArmBones(leftArmRoot);
