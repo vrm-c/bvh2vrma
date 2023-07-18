@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main className={`h-screen flex justify-center lg:items-center font-sans`}>
       <Modal state={modalState} />
-      <div className="rounded-[24px] lg:h-[80vh] lg:w-[80vw] flex justify-center lg:items-center lg:bg-[--charcoal-background1]">
+      <div className="rounded-24 lg:h-[80vh] lg:w-[80vw] flex justify-center lg:items-center lg:bg-[--charcoal-background1]">
         <div className="lg:w-[60vw] lg:flex lg:flex-row-reverse lg:justify-around">
           {blobURL ? (
             <>
