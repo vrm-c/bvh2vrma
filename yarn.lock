@@ -152,7 +152,7 @@
   resolved "https://registry.yarnpkg.com/@charcoal-ui/icon-files/-/icon-files-3.1.1.tgz#5e8da3b21a894c53777df24d8a28b7a1f6be79e4"
   integrity sha512-4zRO90vAUh0aZb3Rs8zN4GsajG8swCVDqSdyzM57ju2kDG1Q/+x626y98fxMsEuFBMkI7uDI9MMqHY0SJdH7Eg==
 
-"@charcoal-ui/icons@^3.1.1", "@charcoal-ui/icons@^v3.1.1":
+"@charcoal-ui/icons@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@charcoal-ui/icons/-/icons-3.1.1.tgz#0b582c319fd53545f3cf2b1830049f19642f0f54"
   integrity sha512-xzYJYgaBFSnOxZJvV0ViXBnB8Q9lDisCMhuHGQ9oqLLoUQfU8TgPxyhwjDnvwp9Luqrm0n+984Yvw1knFgmbag==
@@ -161,7 +161,7 @@
     dompurify "^2.3.6"
     warning "^4.0.3"
 
-"@charcoal-ui/react@^v3.1.1":
+"@charcoal-ui/react@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@charcoal-ui/react/-/react-3.1.1.tgz#f867739fc7bcfaed00a16aa8d7e46d0fe50aca79"
   integrity sha512-YJ2QU0x345hT4O8r5CzQBX0OaIayHIUL3y0opYf5oQFmvm3lp7LyVTpDppdf7b6GTrTs7GcEY/UbjsS9lRX6pA==
@@ -189,7 +189,7 @@
     react-stately "^3.19.0"
     warning "^4.0.3"
 
-"@charcoal-ui/styled@^3.1.1", "@charcoal-ui/styled@^v3.1.1":
+"@charcoal-ui/styled@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@charcoal-ui/styled/-/styled-3.1.1.tgz#2a834f460b26361079b52a71dc47b885eeecbf31"
   integrity sha512-bTqbkcWSuBrzYsrnQkwDH3SF4I6Je2Em7Dc8GAkn1x6K84BsF7gnDsTpcoOYdJ6ylO0vcGCrsQ4zwlRtPjJjsQ==
@@ -199,7 +199,7 @@
     "@charcoal-ui/utils" "^3.1.1"
     warning "^4.0.3"
 
-"@charcoal-ui/tailwind-config@^v3.1.1":
+"@charcoal-ui/tailwind-config@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@charcoal-ui/tailwind-config/-/tailwind-config-3.1.1.tgz#d00a8fc872f7cb8f90e6d4db67964efe331fba13"
   integrity sha512-Dcn4xGXFguB1rVM2K/nVGZLjFOTqzOf4ok5cwrS750d7LC6z/X19kE0yWIYYS6I8ctqwmMr/jme9lrJO7Usb+Q==
@@ -208,7 +208,7 @@
     "@charcoal-ui/theme" "^3.1.1"
     "@charcoal-ui/utils" "^3.1.1"
 
-"@charcoal-ui/theme@^3.1.1", "@charcoal-ui/theme@^v3.1.1":
+"@charcoal-ui/theme@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@charcoal-ui/theme/-/theme-3.1.1.tgz#41b508d3264406f5f9a8defd857f25d6c1ebb1ad"
   integrity sha512-ylj3yK4cXTUAZeFqJWz+IPWehvaRaESdM5MSF/8S25tK4wQNXqE88dzFXxepocpanILDPDnMV5A8vtMNufYuVg==
