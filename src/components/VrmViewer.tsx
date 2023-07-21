@@ -41,7 +41,7 @@ export default function VrmViewer(props: VRMViewerProps) {
   return (
     <div>
       <div className={'lg:w-[390px] w-[358px] sm:w-[60vw] h-[583px] sm:h-[635px]'}>
-        <canvas ref={canvasRef} className={'h-full w-full rounded-24'}></canvas>
+        <canvas ref={canvasRef} className={'h-full w-full rounded-24 bg-[--charcoal-surface3]'}></canvas>
       </div>
       <Button onClick={playAnimation}>Play</Button>
     </div>

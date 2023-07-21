@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
+  color: var(--charcoal-text1);
+  background: var(--charcoal-background2);
 }

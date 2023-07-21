@@ -12,6 +12,7 @@
   "dependencies": {
     "@charcoal-ui/icons": "^2.9.0",
     "@charcoal-ui/react": "^2.9.0",
+    "@charcoal-ui/styled": "^2.9.0",
     "@charcoal-ui/theme": "^2.9.0",
     "@gltf-transform/core": "^3.4.0",
     "@pixiv/three-vrm": "^2.0.0",
