@@ -108,7 +108,7 @@ const LoadBVH = (props: LoadBVHProps) => {
           <div className="flex justify-center pb-16">
             <pixiv-icon class="text-text4" name="24/Check" scale="2"></pixiv-icon>
           </div>
-          <div className="text-center font-bold text-text3 pb-24">変更が完了しました</div>
+          <div className="text-center font-bold text-text3 pb-24">変換が完了しました</div>
           <div className="pb-8">
             <Button onClick={fileDownload} variant="Primary">
               ファイルをダウンロード
