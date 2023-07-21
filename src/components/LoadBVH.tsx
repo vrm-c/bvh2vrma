@@ -95,31 +95,27 @@ const LoadBVH = (props: LoadBVHProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-full w-full border-dashed border-2 border-[#ADADAD] text-center rounded-[16px] text-[20px]">
+    <div className="flex items-center justify-center h-full w-full border-dashed border-2 border-[--charcoal-text4] text-center rounded-16 typography-20">
       {nowConvert ? (
         <div>
-          <div className="pb-[16px]">
+          <div className="pb-16">
             <LoadingSpinner size={48} padding={16} transparent={false} />
           </div>
-          <div className="text-[20px] font-bold text-[--charcoal-text3]">
-            VRMAファイルに変換中...
-          </div>
+          <div className="font-bold text-text3">VRMAファイルに変換中...</div>
         </div>
       ) : completed ? (
         <div>
-          <div className="flex justify-center pb-[16px]">
-            <pixiv-icon class="text-[#ADADAD]" name="24/Check" scale="2"></pixiv-icon>
+          <div className="flex justify-center pb-16">
+            <pixiv-icon class="text-text4" name="24/Check" scale="2"></pixiv-icon>
           </div>
-          <div className="text-center font-bold text-[--charcoal-text3] pb-[24px]">
-            変更が完了しました
-          </div>
-          <div className="pb-[8px]">
+          <div className="text-center font-bold text-text3 pb-24">変更が完了しました</div>
+          <div className="pb-8">
             <Button onClick={fileDownload} variant="Primary">
               ファイルをダウンロード
             </Button>
           </div>
           <div className="flex justify-center ">
-            <button className="text-[#3D7699] text-[14px]" onClick={initializeState}>
+            <button className="text-link1 typography-14" onClick={initializeState}>
               他のファイルを変換
             </button>
           </div>
@@ -137,13 +133,11 @@ const LoadBVH = (props: LoadBVHProps) => {
                   }}
                 >
                   <div>
-                    <div className="flex justify-center pb-[16px]">
-                      <pixiv-icon class="text-[#ADADAD]" name="24/File" scale="2"></pixiv-icon>
+                    <div className="flex justify-center pb-16">
+                      <pixiv-icon class="text-text4" name="24/File" scale="2"></pixiv-icon>
                     </div>
-                    <div className="font-bold text-[--charcoal-text3] sm:hidden">
-                      ファイルを選択
-                    </div>
-                    <div className="font-bold text-[--charcoal-text3] max-sm:hidden">
+                    <div className="font-bold text-text3 sm:hidden">ファイルを選択</div>
+                    <div className="font-bold text-text3 max-sm:hidden">
                       bvhファイルをドラッグ&ドロップ
                       <br />
                       もしくはクリックしてファイルを選択
@@ -154,10 +148,10 @@ const LoadBVH = (props: LoadBVHProps) => {
             </>
           ) : (
             <div>
-              <div className="flex justify-center pb-[16px]">
-                <pixiv-icon class="text-[#ADADAD]" name="24/Error" scale="2"></pixiv-icon>
+              <div className="flex justify-center pb-16">
+                <pixiv-icon class="text-text4" name="24/Error" scale="2"></pixiv-icon>
               </div>
-              <div className="font-bold text-[--charcoal-text3] pb-[16px]">
+              <div className="font-bold text-text3 pb-16">
                 エラーが発生しました。
                 <br />
                 {error}

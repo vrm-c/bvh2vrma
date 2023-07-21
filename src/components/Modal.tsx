@@ -15,29 +15,27 @@ const ModalWrapper = (props: ModalWrapperProps) => {
     <OverlayProvider>
       <Modal size="L" title="" isOpen={state.isOpen} onClose={() => state.close()}>
         {/* <ModalHeader /> */}
-        <ModalBody className="py-32 mx-64 text-[14px]">
-          <div className="py-24 text-[--charcoal-brand] text-[20px]">
-            このアプリケーションについて
-          </div>
+        <ModalBody className="py-32 mx-64 typography-14">
+          <div className="py-24 text-brand typography-20">このアプリケーションについて</div>
           <div>
             <ul className="list-disc pl-24">
               <li>bvhファイルをVRMAnimationファイル(vrma)に変換するアプリケーションです。</li>
               <li>このサイトは入力されたbvhファイルをサーバーにアップロードしません。</li>
               <li>
                 このサイトのライセンスはMITです。リポジトリのリンクは
-                <a className="text-[#3D7699]" href="https://github.com/vrm-c/bvh2vrma">
+                <a className="text-link1" href="https://github.com/vrm-c/bvh2vrma">
                   こちら
                 </a>
                 です。
               </li>
             </ul>
           </div>
-          <div className="py-24 text-[--charcoal-brand] text-[20px]">利用上の注意</div>
+          <div className="py-24 text-brand typography-20">利用上の注意</div>
           <ul className="pl-24 list-disc">
             <li>
               VRMAnimationファイル(vrma)の仕様はドラフト段階です。詳しい仕様に関しましては
               <a
-                className="text-[#3D7699]"
+                className="text-link1"
                 href="https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm_animation-1.0/README.ja.md"
               >
                 GitHub
@@ -52,7 +50,7 @@ const ModalWrapper = (props: ModalWrapperProps) => {
             </li>
           </ul>
           <ModalButtons>
-            <Button variant="Primary" onClick={() => state.close()} fixed>
+            <Button variant="Primary" onClick={() => state.close()}>
               利用する
             </Button>
           </ModalButtons>
