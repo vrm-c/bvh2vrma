@@ -24,6 +24,16 @@ export class Model {
     this.mixer = new THREE.AnimationMixer(vrm.scene);
   }
 
+  public get progress(): number {
+    const action = this.currentAction;
+
+    if (action != null) {
+      return action.time / action.getClip().duration;
+    } else {
+      return 0.0;
+    }
+  }
+
   public async loadAnimation(vrmAnimation: VRMAnimation): Promise<void> {
     const { vrm, mixer } = this;
     if (vrm == null || mixer == null) {
@@ -39,10 +49,21 @@ export class Model {
 
   public playAction() {
     if (this.currentAction && this.mixer) {
-      this.mixer.addEventListener('loop', () => {
-        this.currentAction?.stop();
-      });
       this.currentAction.play();
+      this.currentAction.paused = false;
+    }
+  }
+
+  public pauseAction() {
+    if (this.currentAction && this.mixer) {
+      this.currentAction.paused = true;
+    }
+  }
+
+  public setProgress(progress: number) {
+    if (this.currentAction && this.mixer) {
+      const duration = this.currentAction.getClip().duration;
+      this.currentAction.time = duration * progress;
     }
   }
 
