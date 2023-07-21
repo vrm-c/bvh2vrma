@@ -6,9 +6,11 @@ interface DescriptionProps {
 const Description = (props: DescriptionProps) => {
   const state = props.state;
   return (
-    <div className="p-40">
-      <div className="pb-40 typography-32 text-brand font-bold text-center">bvh to VRMA</div>
-      <div className="text-center typography-14 sm:typography-16 pb-8">
+    <div className="pb-40">
+      <div className="pb-40 text-[32px] text-[--charcoal-brand] font-bold text-center">
+        bvh to VRMA
+      </div>
+      <div className="text-center text-[14px] sm:text-[16px] pb-[6px]">
         あなたのbvhファイルをVRMAファイルに変換します。
       </div>
       <div className="text-center typography-14 sm:typography-16">
