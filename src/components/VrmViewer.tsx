@@ -84,7 +84,7 @@ export default function VrmViewer(props: VRMViewerProps) {
           className="flex w-full h-full grow items-center cursor-pointer"
           onPointerDown={handlePointerDownProgress}
         >
-          <div className="bg-text4 w-full h-[8px] rounded-4 pointer-events-none">
+          <div className="bg-text3-disabled w-full h-[8px] rounded-4 pointer-events-none">
             <div ref={refDivProgress} className="bg-brand h-full rounded-4 pointer-events-none" />
           </div>
         </div>
