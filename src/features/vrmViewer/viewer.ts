@@ -88,10 +88,9 @@ export class Viewer {
     // renderer
     this._renderer = new THREE.WebGLRenderer({
       canvas: canvas,
-      alpha: false,
+      alpha: true,
       antialias: true,
     });
-    this._renderer.outputEncoding = THREE.sRGBEncoding;
     this._renderer.setSize(width, height);
     this._renderer.setPixelRatio(window.devicePixelRatio);
 
