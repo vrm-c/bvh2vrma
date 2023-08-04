@@ -35,7 +35,7 @@ const LoadBVH = (props: LoadBVHProps) => {
     setNowConvert(true);
     let isPropertyConverted = true;
     try {
-      if (!file.name.endsWith('.bvh')) {
+      if (!file.name.endsWith('.bvh') && !file.name.endsWith('.BVH')) {
         throw new Error('Uploaded file is not a BVH file.');
       }
       const fileText = await file.text();
@@ -83,6 +83,7 @@ const LoadBVH = (props: LoadBVHProps) => {
   const onClick = () => {
     const input = document.createElement('input');
     input.type = 'file';
+    input.accept = '.bvh,.BVH';
 
     input.addEventListener('change', () => {
       if (input.files && input.files.length > 0) {
