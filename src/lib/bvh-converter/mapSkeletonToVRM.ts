@@ -61,6 +61,15 @@ function sortObjectArrayByWorldX<T extends THREE.Object3D>(objects: T[]): T[] {
   return objects.sort((a, b) => objWorldXMap.get(a)! - objWorldXMap.get(b)!);
 }
 
+function evaluatorEqual(obj: any, another: any): number {
+  return (obj === another) ? 1 : 0;
+}
+
+function evaluatorName(obj: THREE.Object3D, substring: string): number {
+  const nameLowerCase = obj.name.toLowerCase();
+  return nameLowerCase.includes(substring) ? 1 : 0;
+}
+
 /**
  * Determine spine, chest, and upperChest.
  *
@@ -205,6 +214,73 @@ function determineArmBones(
 }
 
 /**
+ * Determine finger bones.
+ *
+ * The given result map must have hand bones.
+ */
+function determineFingerBones(
+  result: Map<VRMHumanBoneName, THREE.Bone>,
+): void {
+  const leftRights = ['left', 'right'] as const;
+  const handBoneMap = {
+    left: result.get('leftHand')!,
+    right: result.get('rightHand')!,
+  };
+
+  const fingerNames = ['thumb', 'index', 'middle', 'ring', 'little'] as const;
+  const fingerBoneNamesMap = {
+    left: {
+      thumb: ['leftThumbMetacarpal', 'leftThumbProximal', 'leftThumbDistal'],
+      index: ['leftIndexProximal', 'leftIndexIntermediate', 'leftIndexDistal'],
+      middle: ['leftMiddleProximal', 'leftMiddleIntermediate', 'leftMiddleDistal'],
+      ring: ['leftRingProximal', 'leftRingIntermediate', 'leftRingDistal'],
+      little: ['leftLittleProximal', 'leftLittleIntermediate', 'leftLittleDistal'],
+    },
+    right: {
+      thumb: ['rightThumbMetacarpal', 'rightThumbProximal', 'rightThumbDistal'],
+      index: ['rightIndexProximal', 'rightIndexIntermediate', 'rightIndexDistal'],
+      middle: ['rightMiddleProximal', 'rightMiddleIntermediate', 'rightMiddleDistal'],
+      ring: ['rightRingProximal', 'rightRingIntermediate', 'rightRingDistal'],
+      little: ['rightLittleProximal', 'rightLittleIntermediate', 'rightLittleDistal'],
+    },
+  } as const;
+
+  for (const leftRight of leftRights) {
+    const handBone = handBoneMap[leftRight];
+    const fingerRoots = handBone.children.concat();
+
+    for (const fingerName of fingerNames) {
+      const fingerBoneNames = fingerBoneNamesMap[leftRight][fingerName];
+
+      // find nearest bone of the finger
+      const fingerRoot = pickByProbability(
+        fingerRoots,
+        [
+          { func: (obj) => evaluatorName(obj, fingerName), weight: 10.0 },
+          { func: (obj) => obj.getWorldPosition(_v3A).z, weight: 1.0 },
+        ]
+      );
+
+      if (fingerRoot != null) {
+        fingerRoots.splice(fingerRoots.indexOf(fingerRoot), 1);
+
+        result.set(fingerBoneNames[0], fingerRoot as THREE.Bone);
+
+        const child1 = fingerRoot.children[0];
+        if (child1 != null) {
+          result.set(fingerBoneNames[1], child1 as THREE.Bone);
+
+          const child2 = child1.children[0];
+          if (child2 != null) {
+            result.set(fingerBoneNames[2], child2 as THREE.Bone);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Determine neck, head, leftEye, and rightEye.
  *
  * Give it a bone which is a child of chest and supposed to be a root of head.
@@ -243,7 +319,7 @@ function determineHeadBones(
     rightEye = pickByProbability(
       head.children,
       [
-        { func: (obj) => obj === leftEye ? 1.0 : 0.0, weight: -100.0 },
+        { func: (obj) => evaluatorEqual(obj, leftEye), weight: -100.0 },
         { func: (obj) => evaluatorName(obj, 'righteye'), weight: 10.0 },
         { func: (obj) => evaluatorName(obj, 'r_faceeye'), weight: 10.0 },
         { func: (obj) => evaluatorName(obj, 'eye'), weight: 1.0 },
@@ -253,11 +329,6 @@ function determineHeadBones(
   }
 
   return [neck, head, leftEye, rightEye];
-}
-
-function evaluatorName(obj: THREE.Object3D, substring: string): number {
-  const nameLowerCase = obj.name.toLowerCase();
-  return nameLowerCase.includes(substring) ? 1 : 0;
 }
 
 /**
@@ -303,7 +374,7 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   const rightLegRoot = pickByProbability(
     hips.children,
     [
-      { func: (obj) => obj === leftLegRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => evaluatorEqual(obj, leftLegRoot), weight: -100.0 },
       { func: (obj) => evaluatorName(obj, 'rightupperleg'), weight: 10.0 },
       { func: (obj) => evaluatorName(obj, 'r_upperleg'), weight: 10.0 },
       { func: (obj) => evaluatorName(obj, 'leg'), weight: 1.0 },
@@ -344,7 +415,7 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   const rightArmRoot = pickByProbability(
     chestCand.children,
     [
-      { func: (obj) => obj === leftArmRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => evaluatorEqual(obj, leftArmRoot), weight: -100.0 },
       { func: (obj) => evaluatorName(obj, 'rightshoulder'), weight: 10.0 },
       { func: (obj) => evaluatorName(obj, 'r_shoulder'), weight: 10.0 },
       { func: (obj) => evaluatorName(obj, 'rightupperarm'), weight: 10.0 },
@@ -357,8 +428,8 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   const headRoot = pickByProbability(
     chestCand.children,
     [
-      { func: (obj) => obj === leftArmRoot ? 1.0 : 0.0, weight: -100.0 },
-      { func: (obj) => obj === rightArmRoot ? 1.0 : 0.0, weight: -100.0 },
+      { func: (obj) => evaluatorEqual(obj, leftArmRoot), weight: -100.0 },
+      { func: (obj) => evaluatorEqual(obj, rightArmRoot), weight: -100.0 },
       { func: (obj) => evaluatorName(obj, 'neck'), weight: 1.0 },
       { func: (obj) => evaluatorName(obj, 'head'), weight: 1.0 },
       { func: (obj) => Math.abs(obj.getWorldPosition(_v3A).x), weight: -1.0 },
@@ -381,6 +452,9 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   result.set('rightUpperArm', rightUpperArm);
   result.set('rightLowerArm', rightLowerArm);
   result.set('rightHand', rightHand);
+
+  // determine finger bones
+  determineFingerBones(result);
 
   // determine head
   const [neck, head, leftEye, rightEye] = determineHeadBones(headRoot);

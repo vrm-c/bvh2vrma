@@ -7,7 +7,11 @@ export function pickByProbability<T>(
     func: ( value: T ) => number,
     weight: number,
   }[],
-): T {
+): T | null {
+  if (array.length < 1) {
+    return null;
+  }
+
   const results = array.map(() => 0.0);
 
   // execute each evaluators
