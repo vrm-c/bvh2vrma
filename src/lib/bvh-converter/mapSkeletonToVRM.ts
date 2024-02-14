@@ -28,6 +28,27 @@ function objectBFS(
 }
 
 /**
+ * Traverse descendants of given object.
+ * It will return an array of object that the given evaluation function returns `true`.
+ *
+ * It will perform breadth first search.
+ */
+function objectTraverseFilter(
+  root: THREE.Object3D,
+  fn: (obj: THREE.Object3D) => boolean | void
+): THREE.Object3D[] {
+  const result: THREE.Object3D[] = [];
+
+  root.traverse((obj) => {
+    if (fn(obj)) {
+      result.push(obj);
+    }
+  });
+
+  return result;
+}
+
+/**
  * Traverse ancestors of given object.
  * Once the given function returns `true`, it stops the traversal operation and returns the object.
  */
@@ -346,10 +367,17 @@ export function mapSkeletonToVRM(root: THREE.Bone): Map<VRMHumanBoneName, THREE.
   }
   result.set('hips', hips as THREE.Bone);
 
-  // find chest candidate - the first descendant of the hips which has three children
-  const chestCand = objectBFS(hips, (obj) => {
+  // find chest candidate - descendants of the hips which has three or more children
+  const chestCands = objectTraverseFilter(hips, (obj) => {
     return obj !== hips && obj.children.length >= 3;
-  }) as THREE.Bone;
+  }) as THREE.Bone[];
+  const chestCand = pickByProbability(
+    chestCands,
+    [
+      { func: (obj) => evaluatorName(obj, 'upperchest'), weight: 1.0 },
+      { func: (obj) => evaluatorName(obj, 'chest'), weight: 1.0 },
+    ]
+  );
   if (chestCand == null) {
     throw new Error('Cannot find chest.');
   }
