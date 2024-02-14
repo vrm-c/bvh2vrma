@@ -19,11 +19,28 @@ const ModalWrapper = (props: ModalWrapperProps) => {
           <div className="py-24 text-brand typography-20">このアプリケーションについて</div>
           <div>
             <ul className="list-disc pl-24">
-              <li>bvhファイルをVRMAnimationファイル(vrma)に変換するアプリケーションです。</li>
+              <li>bvhファイルをVRMアニメーションファイル (vrma) に変換するアプリケーションです。</li>
+              <li>
+                VRMアニメーションファイルについての詳細は
+                <a
+                  className="text-link1"
+                  href="https://vrm.dev/vrma/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Webサイト
+                </a>
+                をご覧ください。
+              </li>
               <li>このサイトは入力されたbvhファイルをサーバーにアップロードしません。</li>
               <li>
                 このサイトのライセンスはMITです。リポジトリのリンクは
-                <a className="text-link1" href="https://github.com/vrm-c/bvh2vrma">
+                <a
+                  className="text-link1"
+                  href="https://github.com/vrm-c/bvh2vrma"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   こちら
                 </a>
                 です。
@@ -33,20 +50,19 @@ const ModalWrapper = (props: ModalWrapperProps) => {
           <div className="py-24 text-brand typography-20">利用上の注意</div>
           <ul className="pl-24 list-disc">
             <li>
-              VRMAnimationファイル(vrma)の仕様はドラフト段階です。詳しい仕様に関しましては
+              VRMアニメーションファイル (vrma) の詳しい仕様については
               <a
                 className="text-link1"
                 href="https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm_animation-1.0/README.ja.md"
+                target="_blank"
+                rel="noreferrer"
               >
                 GitHub
               </a>
-              にてご覧ください。
+              をご覧ください。
             </li>
             <li>
               変換結果を保証するものではありません。入力されたbvhファイルによっては失敗することがあります。
-            </li>
-            <li>
-              ドラフトのため、書き出されたデータが将来的な仕様変更により使えなくなることがあります。
             </li>
           </ul>
           <ModalButtons>
