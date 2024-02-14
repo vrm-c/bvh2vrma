@@ -1,6 +1,5 @@
+import { VRMAnimation, VRMAnimationLoaderPlugin } from '@pixiv/three-vrm-animation';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMAnimation } from './VRMAnimation';
-import { VRMAnimationLoaderPlugin } from './VRMAnimationLoaderPlugin';
 
 const loader = new GLTFLoader();
 loader.register((parser) => new VRMAnimationLoaderPlugin(parser));

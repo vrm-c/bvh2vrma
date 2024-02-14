@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { VRM, VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { VRMAnimation } from '../../lib/VRMAnimation/VRMAnimation';
+import { VRM, VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+import { VRMAnimation, createVRMAnimationClip } from '@pixiv/three-vrm-animation';
 
 export class Model {
   public vrm?: VRM;
@@ -41,7 +41,7 @@ export class Model {
     }
 
     this.currentAction?.stop();
-    const clip = vrmAnimation.createAnimationClip(vrm);
+    const clip = createVRMAnimationClip(vrmAnimation, vrm);
     const action = mixer.clipAction(clip);
 
     this.currentAction = action;
