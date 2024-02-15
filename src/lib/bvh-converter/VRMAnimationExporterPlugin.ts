@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { GLTFExporterPlugin, GLTFWriter } from 'three/examples/jsm/exporters/GLTFExporter';
 import { GLTF as GLTFSchema } from '@gltf-transform/core';
-import { VRMCVRMAnimation } from '../VRMAnimation/VRMCVRMAnimation';
 import { VRMHumanBoneName } from '@pixiv/three-vrm';
+import { VRMCVRMAnimation } from '@pixiv/types-vrmc-vrm-animation-1.0';
 
 const EXTENSION_NAME = 'VRMC_vrm_animation';
 
@@ -39,6 +39,7 @@ export class VRMAnimationExporterPlugin implements GLTFExporterPlugin {
 
     const extension: VRMCVRMAnimation = {
       specVersion: '1.0',
+      // @ts-expect-error: will fix the three-vrm side later
       humanoid,
     };
 

@@ -595,7 +595,7 @@
   resolved "https://registry.yarnpkg.com/@pixiv/types-vrmc-vrm-1.0/-/types-vrmc-vrm-1.0-2.1.0.tgz#60400a2d7a93ea159bbd1b09c8bfc9da082fff81"
   integrity sha512-fanxk+/M2h9ErUhqc1dyfyhPnT5RNcpI0++y6cfTZcqb3EiZFhijG4C4QptjelLJSn3wDWr6pvzotTxLAew5ug==
 
-"@pixiv/types-vrmc-vrm-animation-1.0@2.1.0":
+"@pixiv/types-vrmc-vrm-animation-1.0@2.1.0", "@pixiv/types-vrmc-vrm-animation-1.0@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@pixiv/types-vrmc-vrm-animation-1.0/-/types-vrmc-vrm-animation-1.0-2.1.0.tgz#cc0be2b4a57d7208ed79b78fafa5d9a017b6e8b4"
   integrity sha512-pYc9ZQf4kX2CeOFiOvbGL0KZcSQti2XDg+c7W8dVrbjBYM/JSNnn8VgFQrD8SSsu3xlwvWeA6BUnf4BIZHU80A==
