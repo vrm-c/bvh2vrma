@@ -41,7 +41,9 @@ const LoadBVH = (props: LoadBVHProps) => {
       const fileText = await file.text();
 
       const bvh = bvhLoader.parse(fileText);
-      const vrmaBuffer = await convertBVHToVRMAnimation(bvh);
+      const vrmaBuffer = await convertBVHToVRMAnimation(bvh, {
+        scale: location.hash.includes('NO_SCALING') ? 1.0 : 0.01
+      });
 
       const vrmaDict: FileBlob = { blob: new Blob([vrmaBuffer]), name: file.name };
       setBlobURL(URL.createObjectURL(vrmaDict.blob));
