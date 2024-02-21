@@ -78,10 +78,16 @@ export async function convertBVHToVRMAnimation(
   if (hipsPositionTrack != null && spinePositionTrack != null) {
     const restSpineLength = spineBone.position.length();
     const animSpineLength = _v3A.fromArray(spinePositionTrack.values).length();
-    const restAnimationScaleRatio = restSpineLength / animSpineLength;
+    const restAnimationScaleRatio = animSpineLength / restSpineLength;
 
-    for (let i = 0; i < hipsPositionTrack.values.length; i++) {
-      hipsPositionTrack.values[i] *= restAnimationScaleRatio;
+    if (restAnimationScaleRatio - 1.0 > 1E-6) {
+      const offset = _v3A.copy(hipsBone.position)
+        .multiplyScalar(restAnimationScaleRatio - 1.0)
+        .toArray();
+
+      for (let i = 0; i < hipsPositionTrack.values.length; i ++) {
+        hipsPositionTrack.values[i] -= offset[i % 3];
+      }
     }
   }
 
