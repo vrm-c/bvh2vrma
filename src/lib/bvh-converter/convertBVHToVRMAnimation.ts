@@ -21,6 +21,8 @@ export async function convertBVHToVRMAnimation(
     scale?: number;
   }
 ): Promise<ArrayBuffer> {
+  const scale = options?.scale ?? 0.01;
+
   const skeleton = bvh.skeleton.clone();
 
   const clip = bvh.clip.clone();
@@ -32,16 +34,15 @@ export async function convertBVHToVRMAnimation(
   const boundingBox = createSkeletonBoundingBox(skeleton);
   rootBone.position.y -= boundingBox.min.y;
 
-  // insert a root node which scales the entire skeleton by 0.01
-  const root = new THREE.Group();
-  root.scale.setScalar(options?.scale ?? 0.01);
-
-  root.add(rootBone);
-  root.updateWorldMatrix(false, true);
+  // scale the entire tree by 0.01
+  rootBone.traverse((bone) => {
+    bone.position.multiplyScalar(scale);
+  });
+  rootBone.updateWorldMatrix(false, true);
 
   // create a map from vrm bone names to bones
   const vrmBoneMap = mapSkeletonToVRM(rootBone);
-  root.userData.vrmBoneMap = vrmBoneMap;
+  rootBone.userData.vrmBoneMap = vrmBoneMap;
 
   const hipsBone = vrmBoneMap.get("hips")!;
   const hipsBoneName = hipsBone.name;
@@ -63,12 +64,18 @@ export async function convertBVHToVRMAnimation(
     }
 
     if (track.name === `${hipsBoneName}.position`) {
-      hipsPositionTrack = track;
-      filteredTracks.push(track);
+      const newTrack = track.clone();
+      newTrack.values = track.values.map((v) => v * (scale));
+
+      hipsPositionTrack = newTrack;
+      filteredTracks.push(newTrack);
     }
 
     if (track.name === `${spineBoneName}.position`) {
-      spinePositionTrack = track;
+      const newTrack = track.clone();
+      newTrack.values = track.values.map((v) => v * (scale));
+
+      spinePositionTrack = newTrack;
     }
   }
 
@@ -78,10 +85,16 @@ export async function convertBVHToVRMAnimation(
   if (hipsPositionTrack != null && spinePositionTrack != null) {
     const restSpineLength = spineBone.position.length();
     const animSpineLength = _v3A.fromArray(spinePositionTrack.values).length();
-    const restAnimationScaleRatio = restSpineLength / animSpineLength;
+    const restAnimationScaleRatio = animSpineLength / restSpineLength;
 
-    for (let i = 0; i < hipsPositionTrack.values.length; i++) {
-      hipsPositionTrack.values[i] *= restAnimationScaleRatio;
+    if (restAnimationScaleRatio - 1.0 > 1E-6) {
+      const offset = _v3A.copy(hipsBone.position)
+        .multiplyScalar(restAnimationScaleRatio - 1.0)
+        .toArray();
+
+      for (let i = 0; i < hipsPositionTrack.values.length; i ++) {
+        hipsPositionTrack.values[i] -= offset[i % 3];
+      }
     }
   }
 
@@ -89,7 +102,7 @@ export async function convertBVHToVRMAnimation(
   const exporter = new GLTFExporter();
   exporter.register((writer) => new VRMAnimationExporterPlugin(writer));
 
-  const gltf = await exporter.parseAsync(root, {
+  const gltf = await exporter.parseAsync(rootBone, {
     animations: [clip],
     binary: true,
   });
