@@ -86,6 +86,13 @@ export async function convertBVHToVRMAnimation(
     }
   }
 
+  // some BVHs does not ground correctly
+  const boundingBox = createSkeletonBoundingBox(skeleton);
+  if (boundingBox.min.y < 0) {
+    rootBone.position.y -= boundingBox.min.y;
+  }
+
+
   // export as a gltf
   const exporter = new GLTFExporter();
   exporter.register((writer) => new VRMAnimationExporterPlugin(writer));
