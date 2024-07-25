@@ -30,10 +30,6 @@ export async function convertBVHToVRMAnimation(
   // find root bone of the skeleton
   const rootBone = getRootBone(skeleton);
 
-  // some BVHs does not ground correctly
-  const boundingBox = createSkeletonBoundingBox(skeleton);
-  rootBone.position.y -= boundingBox.min.y;
-
   // scale the entire tree by 0.01
   rootBone.traverse((bone) => {
     bone.position.multiplyScalar(scale);
@@ -81,22 +77,21 @@ export async function convertBVHToVRMAnimation(
 
   clip.tracks = filteredTracks;
 
-  // some BVHs might have different position scales between rest and animation
-  if (hipsPositionTrack != null && spinePositionTrack != null) {
-    const restSpineLength = spineBone.position.length();
-    const animSpineLength = _v3A.fromArray(spinePositionTrack.values).length();
-    const restAnimationScaleRatio = animSpineLength / restSpineLength;
+  // Remove offsets contained in hips position track
+  if (hipsPositionTrack != null) {
+    const offset = hipsBone.position.toArray();
 
-    if (restAnimationScaleRatio - 1.0 > 1E-6) {
-      const offset = _v3A.copy(hipsBone.position)
-        .multiplyScalar(restAnimationScaleRatio - 1.0)
-        .toArray();
-
-      for (let i = 0; i < hipsPositionTrack.values.length; i ++) {
-        hipsPositionTrack.values[i] -= offset[i % 3];
-      }
+    for (let i = 0; i < hipsPositionTrack.values.length; i ++) {
+      hipsPositionTrack.values[i] -= offset[i % 3];
     }
   }
+
+  // some BVHs does not ground correctly
+  const boundingBox = createSkeletonBoundingBox(skeleton);
+  if (boundingBox.min.y < 0) {
+    rootBone.position.y -= boundingBox.min.y;
+  }
+
 
   // export as a gltf
   const exporter = new GLTFExporter();
